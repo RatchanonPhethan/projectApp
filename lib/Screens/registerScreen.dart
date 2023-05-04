@@ -22,6 +22,10 @@ class RegisterApp extends StatelessWidget {
     TextEditingController passwordTextController = TextEditingController();
     TextEditingController dateinput = TextEditingController();
     TextEditingController phoneTextController = TextEditingController();
+    TextEditingController nameTextController = TextEditingController();
+    TextEditingController surNameTextController = TextEditingController();
+    TextEditingController emailTextController = TextEditingController();
+    TextEditingController addressNameTextController = TextEditingController();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -76,7 +80,7 @@ class RegisterApp extends StatelessWidget {
                     maxLines: 1,
                   ),
                   customTextFormField(
-                    controller: userNameTextController,
+                    controller: nameTextController,
                     hintText: "ชื่อ",
                     maxLength: 50,
                     validator: (Value) {
@@ -94,7 +98,7 @@ class RegisterApp extends StatelessWidget {
                     obscureText: false,
                   ),
                   customTextFormField(
-                    controller: userNameTextController,
+                    controller: surNameTextController,
                     hintText: "นามสกุล",
                     maxLength: 50,
                     validator: (Value) {
@@ -120,14 +124,14 @@ class RegisterApp extends StatelessWidget {
                         if (Value!.isNotEmpty) {
                           return null;
                         } else {
-                          return "กรุณากรอกวันที่โพสต์งาน";
+                          return "กรุณากรอกวันเกิด";
                         }
                       },
                       decoration: const InputDecoration(
                         // icon: Icon(Icons.calendar_today_rounded),
                         prefixIcon: const Icon(Icons.calendar_month_outlined),
-                        labelText: "วันที่โพสต์งาน",
-                        hintText: "วันที่โพสต์งาน",
+                        labelText: "วันเกิด",
+                        hintText: "วันเกิด",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         ),
@@ -158,6 +162,9 @@ class RegisterApp extends StatelessWidget {
                       obscureText: false,
                       validator: (Value) {
                         if (Value!.isNotEmpty) {
+                          if (Value.length < 10) {
+                            return "กรุณากรอกเบอร์โทรศัพท์ 10 ตัว";
+                          }
                           return null;
                         } else {
                           return "กรุณากรอกเบอร์โทรศัพท์";
@@ -174,7 +181,7 @@ class RegisterApp extends StatelessWidget {
                     ),
                   ),
                   customTextFormField(
-                    controller: userNameTextController,
+                    controller: emailTextController,
                     hintText: "อีเมล์",
                     maxLength: 50,
                     validator: (Value) {
@@ -192,7 +199,7 @@ class RegisterApp extends StatelessWidget {
                     obscureText: false,
                   ),
                   customTextFormField(
-                    controller: userNameTextController,
+                    controller: addressNameTextController,
                     hintText: "ที่อยู่",
                     maxLength: 50,
                     validator: (Value) {
