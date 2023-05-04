@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import '../styles/styles.dart';
 import '../widgets/MenuWidget.dart';
 
-class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

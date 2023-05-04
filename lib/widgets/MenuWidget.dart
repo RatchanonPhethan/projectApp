@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_project_application/Screens/loginScreen.dart';
 
 import '../styles/styles.dart';
 
@@ -139,12 +140,12 @@ class MenuWidget extends StatelessWidget {
               size: 30,
               color: kIconColor,
             ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const LoginApp();
+              }));
+            },
             title: Text(
               "ออกจากระบบ",
               style: TextStyle(color: KFontColor),
