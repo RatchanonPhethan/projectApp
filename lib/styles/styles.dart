@@ -6,3 +6,5 @@ var KFontColor = Colors.black;
 double kDefaultPaddingH = 35.0;
 var kIconColor = Colors.black;
 var KFontHomeTitleColor = Colors.white;
+var registerButtonColor = const Color.fromRGBO(255, 61, 61, 1);
+var loginButtonColor = const Color.fromRGBO(64, 205, 95, 1);

@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_project_application/Screens/registerScreen.dart';
 
 import '../styles/styles.dart';
 import '../widgets/customTextFormField.dart';
@@ -15,7 +18,7 @@ class LoginApp extends StatelessWidget {
     TextEditingController userNameTextController = TextEditingController();
     TextEditingController passwordTextController = TextEditingController();
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
         child: Form(
           key: formkey,
           child: Column(children: [
@@ -27,8 +30,8 @@ class LoginApp extends StatelessWidget {
                   children: [
                     Image.asset(
                       "images/user.png",
-                      width: 200,
-                      height: 200,
+                      width: 150,
+                      height: 150,
                     ),
                   ],
                 ),
@@ -83,7 +86,8 @@ class LoginApp extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                   vertical: 10, horizontal: kDefaultPaddingH),
               child: SizedBox(
-                height: 53,
+                height: 45,
+                width: 200,
                 child: ElevatedButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
@@ -94,12 +98,40 @@ class LoginApp extends StatelessWidget {
                       }
                     },
                     style: ButtonStyle(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => loginButtonColor),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text("เข้าสู่ระบบ"),
+                      ],
+                    )),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: 10, horizontal: kDefaultPaddingH),
+              child: SizedBox(
+                height: 40,
+                width: 150,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return const RegisterApp();
+                      }));
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => registerButtonColor),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text("สมัครสมาชิก"),
                       ],
                     )),
               ),
