@@ -36,11 +36,6 @@ class Homepage extends StatelessWidget {
           ),
         ],
       ),
-      // body: SpinKitWave(
-      //   color: Colors.redAccent,
-      //   size: 200,
-      //   duration: Duration(seconds: 3),
-      // ),
     );
   }
 }
