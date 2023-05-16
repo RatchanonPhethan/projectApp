@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_project_application/Screens/registerScreen.dart';
 
 import '../styles/styles.dart';
+import '../widgets/MenuFooter.dart';
 import '../widgets/customTextFormField.dart';
 import 'Home.dart';
 
@@ -93,7 +94,7 @@ class LoginApp extends StatelessWidget {
                       if (formkey.currentState!.validate()) {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (BuildContext context) {
-                          return const HomePage();
+                          return const MainPage();
                         }));
                       }
                     },

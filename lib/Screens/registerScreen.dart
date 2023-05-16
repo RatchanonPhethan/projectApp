@@ -3,12 +3,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project_application/Screens/loginScreen.dart';
 import 'dart:js_util';
 import 'dart:ui';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 import '../styles/styles.dart';
+import '../widgets/MenuFooter.dart';
 import '../widgets/customTextFormField.dart';
 import 'Home.dart';
 
@@ -28,6 +30,17 @@ class RegisterApp extends StatelessWidget {
     TextEditingController addressNameTextController = TextEditingController();
 
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (BuildContext context) {
+            return const LoginApp();
+          })),
+        ),
+        centerTitle: true,
+        backgroundColor: kPrimary,
+      ),
       body: SingleChildScrollView(
           child: Form(
               key: formkey,
@@ -228,7 +241,7 @@ class RegisterApp extends StatelessWidget {
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                return const HomePage();
+                                return const MainPage();
                               }));
                             }
                           },

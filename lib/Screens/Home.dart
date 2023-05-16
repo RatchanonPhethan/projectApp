@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../styles/styles.dart';
+import '../widgets/CustomSearchDelegate.dart';
+import '../widgets/MenuFooter.dart';
 import '../widgets/MenuWidget.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,31 +13,30 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "PROJECT APP",
+          "Home",
           style: TextStyle(color: KFontColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // method to show the search bar
+              showSearch(
+                  context: context,
+                  // delegate to customize the search bar
+                  delegate: CustomSearchDelegate());
+            },
+            icon: const Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+          )
+        ],
         backgroundColor: kPrimary,
       ),
       drawer: MenuWidget(),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_rounded),
-            label: 'Add Post',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
     );
   }
 }

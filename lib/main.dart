@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_application/styles/styles.dart';
+import 'package:flutter_project_application/widgets/MenuFooter.dart';
 import 'package:flutter_project_application/widgets/MenuWidget.dart';
 
 import 'Screens/Home.dart';
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'PROJECT APP',
-      home: HomePage(),
+      home: MainPage(),
     );
   }
 }

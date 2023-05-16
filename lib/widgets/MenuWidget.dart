@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_project_application/Screens/Home.dart';
 import 'package:flutter_project_application/Screens/loginScreen.dart';
 
+import '../Screens/TopUpMoneyScreen.dart';
 import '../styles/styles.dart';
+import 'MenuFooter.dart';
 
 class MenuWidget extends StatelessWidget {
   const MenuWidget({super.key});
@@ -21,12 +24,12 @@ class MenuWidget extends StatelessWidget {
               size: 30,
               color: kIconColor,
             ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const MainPage();
+              }));
+            },
             title: Text(
               "หน้าหลัก",
               style: TextStyle(color: KFontColor),
@@ -123,12 +126,12 @@ class MenuWidget extends StatelessWidget {
               size: 30,
               color: kIconColor,
             ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return const TopUpMoneyScreen();
+              }));
+            },
             title: Text(
               "เติมเงิน",
               style: TextStyle(color: KFontColor),
