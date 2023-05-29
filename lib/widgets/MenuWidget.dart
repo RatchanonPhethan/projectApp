@@ -129,7 +129,7 @@ class MenuWidget extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (BuildContext context) {
-                return const TopUpMoneyScreen();
+                return const TopUpMomey();
               }));
             },
             title: Text(
