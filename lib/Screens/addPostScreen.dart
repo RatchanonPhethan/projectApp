@@ -11,6 +11,7 @@ import '../widgets/MenuFooter.dart';
 import '../widgets/MenuWidget.dart';
 import '../widgets/customTextFormField.dart';
 
+// ignore: camel_case_types
 class addPost extends StatefulWidget {
   const addPost({super.key});
 
@@ -19,17 +20,23 @@ class addPost extends StatefulWidget {
 }
 
 enum ShippingType { pickup, delivery }
+// ignore: unused_element
+// int _groupValue = -1;
 
+// ignore: camel_case_types
 class _addPostState extends State<addPost> {
+  GlobalKey<FormState> formkey = GlobalKey();
+  TextEditingController postNameTextController = TextEditingController();
+  TextEditingController priceTextController = TextEditingController();
+  TextEditingController end_date = TextEditingController();
+  TextEditingController postDetailTextController = TextEditingController();
+  TextEditingController shippingFeeTextController = TextEditingController();
+  var shippingType = ShippingType.pickup;
+  // int _groupValue = -1;
+  bool enaShipping = false;
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> formkey = GlobalKey();
-    TextEditingController postNameTextController = TextEditingController();
-    TextEditingController priceTextController = TextEditingController();
-    TextEditingController end_date = TextEditingController();
-    TextEditingController postDetailTextController = TextEditingController();
-    ShippingType? shippingType = ShippingType.pickup;
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -58,7 +65,7 @@ class _addPostState extends State<addPost> {
         body: SingleChildScrollView(
             child: Form(
           key: formkey,
-          child: Column(children: <Widget>[
+          child: Column(children: [
             const Padding(
               padding: EdgeInsets.only(top: 15, bottom: 5),
               child: Text("เพิ่มโพสต์",
@@ -170,17 +177,19 @@ class _addPostState extends State<addPost> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 35),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 35),
               child: Row(
                 children: [
                   Expanded(
                     child: RadioListTile<ShippingType>(
                         value: ShippingType.pickup,
                         groupValue: shippingType,
-                        title: Text("นัดรับ"),
+                        title: const Text("นัดรับ"),
                         onChanged: (ShippingType? val) {
                           setState(() {
-                            shippingType = val;
+                            print("pickup");
+                            shippingType = ShippingType.pickup;
+                            enaShipping = false;
                           });
                         }),
                   ),
@@ -188,14 +197,48 @@ class _addPostState extends State<addPost> {
                     child: RadioListTile<ShippingType>(
                         value: ShippingType.delivery,
                         groupValue: shippingType,
-                        title: Text("จัดส่ง"),
+                        title: const Text("จัดส่ง"),
                         onChanged: (ShippingType? val) {
                           setState(() {
-                            shippingType = val;
+                            print("delivery");
+                            shippingType = ShippingType.delivery;
+                            enaShipping = true;
                           });
                         }),
                   )
                 ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 35),
+              child: TextFormField(
+                controller: shippingFeeTextController,
+                maxLength: 10,
+                maxLines: 1,
+                keyboardType: TextInputType.text,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                obscureText: false,
+                validator: (Value) {
+                  if (Value!.isNotEmpty) {
+                    if (int.parse(Value) <= 0) {
+                      return "กรุณากรอกค่าจัดส่งมากกว่า 0 บาท";
+                    }
+                    return null;
+                  } else {
+                    return "กรุณากรอกค่าจัดส่ง";
+                  }
+                },
+                decoration: const InputDecoration(
+                  hintText: "ค่าจัดส่ง",
+                  counterText: "",
+                  labelText: "ค่าจัดส่ง",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  ),
+                ),
+                enabled: enaShipping,
               ),
             ),
             Padding(
@@ -230,3 +273,29 @@ class _addPostState extends State<addPost> {
         )));
   }
 }
+
+// class AvatarWidget extends StatefulWidget {
+//   const AvatarWidget({
+//     Key? key,
+//     required this.callback,
+//     this.defaultImage,
+//   }) : super(key: key);
+
+//   final Function(Uint8List) callback;
+//   final Image? defaultImage;
+
+//   @override
+//   State<AvatarWidget> createState() => _AvatarWidgetState();
+// }
+// 
+// Widget _myRadioButton(
+//     { String title,  int value,  required Function onChanged}) {
+//   return RadioListTile(
+//     value: value,
+//     groupValue: _groupValue,
+//     onChanged: onChanged,
+//     title: Text(title),
+//   );
+// }
+
+

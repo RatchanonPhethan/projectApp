@@ -1,34 +1,37 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_project_application/Screens/loginScreen.dart';
-import 'dart:js_util';
-import 'dart:ui';
-// ignore: depend_on_referenced_packages
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 
 import '../styles/styles.dart';
 import '../widgets/MenuFooter.dart';
 import '../widgets/customTextFormField.dart';
-import 'Home.dart';
+import 'loginScreen.dart';
 
-class RegisterApp extends StatelessWidget {
+enum Gender { male, fmale }
+
+class RegisterApp extends StatefulWidget {
   const RegisterApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    GlobalKey<FormState> formkey = GlobalKey();
-    TextEditingController userNameTextController = TextEditingController();
-    TextEditingController passwordTextController = TextEditingController();
-    TextEditingController dateinput = TextEditingController();
-    TextEditingController phoneTextController = TextEditingController();
-    TextEditingController nameTextController = TextEditingController();
-    TextEditingController surNameTextController = TextEditingController();
-    TextEditingController emailTextController = TextEditingController();
-    TextEditingController addressNameTextController = TextEditingController();
+  State<RegisterApp> createState() => _RegisterAppState();
+}
 
+class _RegisterAppState extends State<RegisterApp> {
+  GlobalKey<FormState> formkey = GlobalKey();
+  TextEditingController userNameTextController = TextEditingController();
+  TextEditingController passwordTextController = TextEditingController();
+  TextEditingController dateinput = TextEditingController();
+  TextEditingController phoneTextController = TextEditingController();
+  TextEditingController nameTextController = TextEditingController();
+  TextEditingController surNameTextController = TextEditingController();
+  TextEditingController emailTextController = TextEditingController();
+  TextEditingController addressNameTextController = TextEditingController();
+  var gender = Gender.male;
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -228,6 +231,36 @@ class RegisterApp extends StatelessWidget {
                       }
                     },
                     obscureText: false,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 35),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<Gender>(
+                              value: Gender.male,
+                              groupValue: gender,
+                              title: const Text("ชาย"),
+                              onChanged: (Gender? val) {
+                                setState(() {
+                                  gender = Gender.male;
+                                });
+                              }),
+                        ),
+                        Expanded(
+                          child: RadioListTile<Gender>(
+                              value: Gender.fmale,
+                              groupValue: gender,
+                              title: const Text("หญิง"),
+                              onChanged: (Gender? val) {
+                                setState(() {
+                                  gender = Gender.fmale;
+                                });
+                              }),
+                        )
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
