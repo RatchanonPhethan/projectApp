@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_project_application/Model/joinpost.dart';
 
 import '../constant/constant_value.dart';
@@ -39,6 +41,19 @@ class JoinPostController {
         JoinPostModel.fromJoinPostToJson(jsonResponse['result']);
     print("Controller : ${joinpost.payment_id}");
     return joinpost;
+  }
+
+  Future getJoinPostByPostId(String postId) async {
+    Map data = {};
+    var url = Uri.parse('$baseURL/join/listmember/$postId');
+    var body = json.encode(data);
+    print(url);
+    http.Response response = await http.post(url, headers: headers, body: body);
+    print(response.body);
+    List? list;
+    Map<String, dynamic> mapResponse = json.decode(response.body);
+    list = mapResponse['result'];
+    return list!.map((e) => JoinPostModel.fromJoinPostToJson(e)).toList();
   }
 
   Future confirmReceiveProduct(String paymentId) async {
@@ -159,7 +174,6 @@ class JoinPostController {
 
   Future joinCount(String username, String postId) async {
     Map data = {"postId": postId, "username": username};
-
     var body = json.encode(data);
     var url = Uri.parse('$baseURL/join/joincount');
 
