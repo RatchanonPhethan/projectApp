@@ -8,3 +8,4 @@ var kIconColor = Colors.black;
 var KFontHomeTitleColor = Colors.white;
 var registerButtonColor = const Color.fromRGBO(255, 61, 61, 1);
 var loginButtonColor = const Color.fromRGBO(64, 205, 95, 1);
+var joinButtonColor = const Color.fromARGB(255, 79, 109, 243);
