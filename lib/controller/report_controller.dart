@@ -80,11 +80,11 @@ class ReportController {
       "postId": postId,
     };
 
-    var path = await upload(img);
+    // var path = await upload(img);
 
-    data["img_report"] = path;
+    // data["img_report"] = path;
 
-    print(path);
+    // print(path);
     var body = json.encode(data);
     var url = Uri.parse('$baseURL/report/add');
 
@@ -94,21 +94,21 @@ class ReportController {
     print(jsonResponse);
   }
 
-  Future upload(File file) async {
-    if (file == null) return;
+  // Future upload(File file) async {
+  //   if (file == null) return;
 
-    var uri = Uri.parse(baseURL + "/report/upload");
-    var length = await file.length();
-    //print(length);
-    http.MultipartRequest request = new http.MultipartRequest('POST', uri)
-      ..headers.addAll(headers)
-      ..files.add(
-        // replace file with your field name exampe: image
-        http.MultipartFile('image', file.openRead(), length,
-            filename: 'test.png'),
-      );
-    var response = await http.Response.fromStream(await request.send());
-    //var jsonResponse = jsonDecode(response.body);
-    return response.body;
-  }
+  //   var uri = Uri.parse(baseURL + "/report/upload");
+  //   var length = await file.length();
+  //   //print(length);
+  //   http.MultipartRequest request = new http.MultipartRequest('POST', uri)
+  //     ..headers.addAll(headers)
+  //     ..files.add(
+  //       // replace file with your field name exampe: image
+  //       http.MultipartFile('image', file.openRead(), length,
+  //           filename: 'test.png'),
+  //     );
+  //   var response = await http.Response.fromStream(await request.send());
+  //   //var jsonResponse = jsonDecode(response.body);
+  //   return response.body;
+  // }
 }
