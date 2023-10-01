@@ -1,159 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_project_application/Screens/Home.dart';
-import 'package:flutter_project_application/Screens/loginScreen.dart';
-
-import '../Screens/TopUpMoneyScreen.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import '../Model/login.dart';
+import '../controller/login_controller.dart';
 import '../styles/styles.dart';
-import 'MenuFooter.dart';
+import 'MenuAdminWidgets.dart';
+import 'MenuMemberWidgets.dart';
+import 'MenuPublicWidget.dart';
 
-class MenuWidget extends StatelessWidget {
+class MenuWidget extends StatefulWidget {
   const MenuWidget({super.key});
+
+  @override
+  State<MenuWidget> createState() => _MenuWidgetState();
+}
+
+class _MenuWidgetState extends State<MenuWidget> {
+  final LoginController loginController = LoginController();
+  LoginModel? logins;
+  String? user;
+  bool? isDataLoaded = false;
+  var sessionManager = SessionManager();
+  void getUser() async {
+    user = await sessionManager.get("username");
+    fetchLoginByUsername(user.toString());
+  }
+
+  void fetchLoginByUsername(String username) async {
+    logins = await loginController.LoginByUsername(username);
+    setState(() {
+      isDataLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
         backgroundColor: kBackgroundColor,
         width: 300,
-        child: Column(children: [
-          Icon(Icons.person, size: 100, color: kIconColor),
-          ListTile(
-            leading: Icon(
-              Icons.home,
-              size: 30,
-              color: kIconColor,
-            ),
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return const MainPage();
-              }));
-            },
-            title: Text(
-              "หน้าหลัก",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.description_outlined,
-              size: 30,
-              color: kIconColor,
-            ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
-            title: Text(
-              "โพสต์แชร์ของฉัน",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.person_add_alt_1,
-              size: 30,
-              color: kIconColor,
-            ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
-            title: Text(
-              "โพสต์แชร์ที่เข้าร่วม",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.star_border_purple500_rounded,
-              size: 30,
-              color: kIconColor,
-            ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
-            title: Text(
-              "ประวัติการรีวิว",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.email_outlined,
-              size: 30,
-              color: kIconColor,
-            ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
-            title: Text(
-              "คำเชิญของฉัน",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.add_alert_rounded,
-              size: 30,
-              color: kIconColor,
-            ),
-            // onTap: () {
-            //   Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (BuildContext context) {
-            //     return const HomeScreen();
-            //   }));
-            // },
-            title: Text(
-              "แจ้งเตือนของฉัน",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.monetization_on_outlined,
-              size: 30,
-              color: kIconColor,
-            ),
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return const TopUpMomey();
-              }));
-            },
-            title: Text(
-              "เติมเงิน",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.logout_rounded,
-              size: 30,
-              color: kIconColor,
-            ),
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return const LoginApp();
-              }));
-            },
-            title: Text(
-              "ออกจากระบบ",
-              style: TextStyle(color: KFontColor),
-            ),
-          ),
-        ]));
+        child: isDataLoaded == false
+            ? const SizedBox(
+                height: 10.0,
+                width: 10.0,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            : user == null
+                ? const MenuPublicWidget()
+                : logins?.isadmin == true
+                    ? const MenuAdminWidget()
+                    : const MenuMemberWidget());
   }
 }
