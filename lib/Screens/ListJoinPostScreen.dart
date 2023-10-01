@@ -708,16 +708,16 @@ class _ListJoinPostScreenState extends State<ListJoinPostScreen> {
                       height: 20.05,
                       child: Stack(
                         children: [
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Container(
-                              width: 81,
-                              height: 20,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xFFD9D9D9)),
-                            ),
-                          ),
+                          // Positioned(
+                          //   left: 0,
+                          //   top: 0,
+                          //   child: Container(
+                          //     width: 81,
+                          //     height: 20,
+                          //     decoration:
+                          //         const BoxDecoration(color: Color(0xFFD9D9D9)),
+                          //   ),
+                          // ),
                           Positioned(
                             left: 0,
                             top: 0.05,
@@ -838,15 +838,20 @@ class _ListJoinPostScreenState extends State<ListJoinPostScreen> {
                   Positioned(
                     left: 21,
                     top: 40,
-                    child: Container(
+                    child: Image.asset(
+                      "images/img.jpg",
                       width: 57,
                       height: 57,
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFD9D9D9),
-                        shape:
-                            RoundedRectangleBorder(side: BorderSide(width: 1)),
-                      ),
                     ),
+                    // Container(
+                    //   width: 57,
+                    //   height: 57,
+                    //   decoration: const ShapeDecoration(
+                    //     color: Color(0xFFD9D9D9),
+                    //     shape:
+                    //         RoundedRectangleBorder(side: BorderSide(width: 1)),
+                    //   ),
+                    // ),
                   ),
                 ],
               ),
