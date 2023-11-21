@@ -1,5 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_typing_uninitialized_variables, non_constant_identifier_names, duplicate_ignore
-import 'dart:convert';
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter_project_application/Model/login.dart';
 import 'package:intl/intl.dart';

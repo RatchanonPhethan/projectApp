@@ -18,10 +18,14 @@ class _MenuWidgetState extends State<MenuWidget> {
   final LoginController loginController = LoginController();
   LoginModel? logins;
   String? user;
+  String? memberId;
   bool? isDataLoaded = false;
   var sessionManager = SessionManager();
   void getUser() async {
     user = await sessionManager.get("username");
+    memberId = await sessionManager.get("memberId");
+    print(memberId);
+
     fetchLoginByUsername(user.toString());
   }
 

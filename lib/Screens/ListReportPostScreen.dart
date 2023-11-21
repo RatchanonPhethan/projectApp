@@ -1,11 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_project_application/Model/joinpost.dart';
+import 'package:flutter_project_application/Screens/deletePostScreen.dart';
 import 'package:flutter_project_application/controller/joinpost_controller.dart';
 import 'package:flutter_project_application/controller/post_controller.dart';
 
 import '../Model/report.dart';
+import '../constant/constant_value.dart';
 import '../controller/report_controller.dart';
 import '../styles/styles.dart';
 import '../widgets/MenuFooter.dart';
@@ -20,34 +24,56 @@ class ListReportPostScreen extends StatefulWidget {
 
 class _ListReportPostScreenState extends State<ListReportPostScreen> {
   bool? isDataLoaded = false;
+  bool? check = true;
   final ReportController reportController = ReportController();
   final JoinPostController joinPostController = JoinPostController();
   final PostController postController = PostController();
   List<JoinPostModel>? joinposts;
   List<ReportModel>? reports;
-  int? countMember;
-
+  List<int> countPost = [];
+  String? productimg;
+  String? replaceString;
+  String? subproductimg;
+  List<String> imgReportFileName = [];
   void fetchReportPost() async {
     reports = await reportController.listReportPost();
+    if (reports!.isNotEmpty) {
+      for (int i = 0; i < reports!.length; i++) {
+        int count =
+            await reportController.reportPostCount(reports![i].post.post_id);
+
+        countPost.add(count);
+        String strimg = reports![i].post.img_product.first;
+        replaceString = strimg.replaceAll("[", "").replaceAll("]", "");
+        List<String> listfilepath =
+            replaceString!.split(",").map((s) => s.trim()).toList();
+        subproductimg = listfilepath
+            .elementAt(0)
+            .substring(listfilepath.elementAt(0).lastIndexOf("/") + 1);
+        imgReportFileName.add(subproductimg!);
+      }
+      setState(() {
+        isDataLoaded = true;
+      });
+    } else {
+      timeDuration();
+    }
+  }
+
+  void fetchCountPost() async {
     setState(() {
       isDataLoaded = true;
     });
   }
 
-  void removePost(String postId) async {
-    if (joinposts!.isNotEmpty) {
-      for (int i = 0; i < joinposts!.length; i++) {
-        print(joinposts![i].payment_id);
-        await joinPostController.leaveGroup(joinposts![i].payment_id);
-      }
-    }
-    await postController.removePost(postId);
+  void timeDuration() {
     setState(() {
-      isDataLoaded = false;
+      check = true;
     });
-    fetchReportPost();
-    setState(() {
-      isDataLoaded = true;
+    Timer(const Duration(milliseconds: 2000), () {
+      setState(() {
+        check = false;
+      });
     });
   }
 
@@ -62,7 +88,8 @@ class _ListReportPostScreenState extends State<ListReportPostScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("รายชื่อการรายงานโพสต์"),
+        title: Text("รายชื่อการรายงานโพสต์",
+            style: TextStyle(fontFamily: 'Itim', color: KFontColor)),
         leading: BackButton(
           color: Colors.black,
           onPressed: () => Navigator.of(context).pushReplacement(
@@ -70,28 +97,55 @@ class _ListReportPostScreenState extends State<ListReportPostScreen> {
             return const MainPage();
           })),
         ),
-        centerTitle: true,
         backgroundColor: kPrimary,
       ),
       body: isDataLoaded == false
-          ? const CircularProgressIndicator()
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  check == true
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                          backgroundColor: Colors.grey,
+                        )
+                      : const Text(
+                          "ไม่พบการรายงานโพสต์",
+                          style: TextStyle(fontFamily: 'Itim', fontSize: 18),
+                        ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return const MainPage();
+                        }));
+                      },
+                      child: const Text(
+                        "กลับสู่หน้าหลัก",
+                        style: TextStyle(fontFamily: 'Itim'),
+                      ))
+                ],
+              ),
+            )
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 40),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         children: const [
                           Text(
                             "รายชื่อการรายงานโพสต์",
-                            style: TextStyle(fontFamily: 'Itim', fontSize: 32),
+                            style: TextStyle(fontFamily: 'Itim', fontSize: 20),
                           ),
                           Divider(
-                            thickness: 3,
-                            indent: 35,
-                            endIndent: 35,
+                            thickness: 1,
+                            indent: 50,
+                            endIndent: 50,
                             color: Colors.black,
                           ),
                         ],
@@ -110,84 +164,47 @@ class _ListReportPostScreenState extends State<ListReportPostScreen> {
                                 borderRadius: BorderRadius.circular(10)),
                             child: ListTile(
                               leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [Icon(Icons.account_circle)],
-                              ),
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                        '$baseURL/post/${imgReportFileName[index]}',
+                                        width: 40,
+                                        height: 45,
+                                        fit: BoxFit.cover),
+                                  ]),
                               title: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${reports?[index].post.post_name}",
+                                    "โพสต์ : ${reports?[index].post.post_name}",
                                     style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 22),
+                                        fontFamily: 'Itim', fontSize: 18),
                                   ),
                                   Text(
-                                    "${reports?[index].detail}",
+                                    "ผู้โพสต์ : ${reports?[index].post.member.login.username}",
                                     style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 22),
+                                        fontFamily: 'Itim', fontSize: 18),
+                                  ),
+                                  Text(
+                                    "จำนวนรายงาน : ${countPost[index]} รายงาน",
+                                    style: const TextStyle(
+                                        fontFamily: 'Itim', fontSize: 18),
                                   ),
                                 ],
                               ),
-                              trailing: ElevatedButton(
-                                onPressed: () {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title: const Text('ลบโพสต์'),
-                                      content: const Text(
-                                          'คุณต้องการลบโพสต์นี้หรือไม่ ?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            joinposts = await joinPostController
-                                                .getJoinPostByPostId(
-                                                    reports![index]
-                                                        .post
-                                                        .post_id);
-
-                                            Navigator.pop(context, 'OK');
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const Text(
-                                                    'ดำเนินการสำเร็จ!'),
-                                                content: const Text(
-                                                    'คุณได้ลบโพสต์นี้แล้ว!!'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(
-                                                          context, 'OK');
-                                                      removePost(reports![index]
-                                                          .post
-                                                          .post_id);
-                                                    },
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) => Colors.redAccent)),
-                                child: const Text("ลบโพสต์"),
-                              ),
+                              trailing: null,
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return DeletePostScreen(
+                                          postId: reports![index].post.post_id);
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },

@@ -16,13 +16,16 @@ class BanModel {
       required this.start_date,
       required this.end_date,
       required this.member});
+
   factory BanModel.fromBanToJson(Map<String, dynamic> json) => BanModel(
-      ban_id: json["ban_id"],
-      ban_detail: json["ban_detail"],
-      start_date:
-          DateFormat('MMM d, yyyy, HH:mm:ss aaa').parse(json['start_date']),
-      end_date: DateFormat('MMM d, yyyy, HH:mm:ss aaa').parse(json['end_date']),
-      member: MemberModel.fromMemberToJson(json['member_id']));
+        ban_id: json["ban_id"],
+        ban_detail: json["ban_detail"],
+        start_date:
+            DateFormat('MMM d, yyyy, HH:mm:ss aaa').parse(json['start_date']),
+        end_date:
+            DateFormat('MMM d, yyyy, HH:mm:ss aaa').parse(json['end_date']),
+        member: MemberModel.fromMemberToJson(json['member_id']),
+      );
 
   Map<String, dynamic> fromBanToJson() {
     return <String, dynamic>{

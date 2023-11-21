@@ -1,18 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_application/Model/joinpost.dart';
-import 'package:flutter_project_application/Model/member.dart';
-import 'package:flutter_project_application/Model/post.dart';
-import 'package:flutter_project_application/Screens/PostDetailScreen.dart';
-import 'package:flutter_project_application/controller/joinpost_controller.dart';
-import 'package:flutter_project_application/controller/member_controller.dart';
-import 'package:flutter_project_application/controller/post_controller.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:intl/intl.dart';
 
+import '../Model/joinpost.dart';
+import '../Model/member.dart';
+import '../Model/post.dart';
+import '../controller/joinpost_controller.dart';
+import '../controller/member_controller.dart';
+import '../controller/post_controller.dart';
 import '../styles/styles.dart';
 import '../widgets/CustomSearchDelegate.dart';
 import '../widgets/MenuWidget.dart';
 import '../widgets/ReportPostWidget.dart';
+import 'PostDetailScreen.dart';
 import 'ViewMemberReviewScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   bool? isDataLoaded = false;
   String? user;
   List<JoinPostModel>? joinposts;
-  var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+  var outputFormat = DateFormat('dd/MM/yyyy hh:mm a');
   var outputDate;
 
   final PostController postController = PostController();
@@ -37,17 +38,12 @@ class _HomePageState extends State<HomePage> {
   final MemberController memberController = MemberController();
 
   void fetchPost() async {
-    posts = await postController.listAllPosts();
-    user = await sessionManager.get("username");
-    fetchMemberByUser(user.toString());
+    user = await SessionManager().get("username");
+    print(user);
+    posts = await postController.getListAllPost();
     setState(() {
       isDataLoaded = true;
     });
-  }
-
-  void fetchMemberByUser(String username) async {
-    member = await memberController.getMemberByUsername(username);
-    await SessionManager().set("memberId", member!.member_id.toString());
   }
 
   void fetchJoinPost() async {
@@ -60,10 +56,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // fetchJoinPost();
-    // fetchMemberByUser(user!);
     fetchPost();
-    // print(user);
   }
 
   @override
@@ -92,6 +85,7 @@ class _HomePageState extends State<HomePage> {
         ],
         backgroundColor: kPrimary,
       ),
+      drawer: const MenuWidget(),
       body: isDataLoaded == false
           ? const CircularProgressIndicator()
           : SingleChildScrollView(
@@ -202,7 +196,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-      drawer: const MenuWidget(),
     );
   }
 }

@@ -13,8 +13,6 @@ class ReviewController {
     var url = Uri.parse('$baseURL/review/listmember/$memberId');
     var body = json.encode(data);
 
-    print(url);
-
     http.Response response = await http.post(url, headers: headers, body: body);
 
     // ignore: avoid_print
@@ -41,7 +39,6 @@ class ReviewController {
     http.Response response = await http.post(url, headers: headers, body: body);
     //print(response.statusCode);
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
   }
 
   Future reviewCount(String paymentId, String memberId) async {
@@ -59,7 +56,18 @@ class ReviewController {
     int? str;
     Map<String, dynamic> mapResponse = json.decode(response.body);
     str = mapResponse['result'];
-    print(jsonResponse);
     return str;
+  }
+
+  Future getRating(String memberId) async {
+    var url = Uri.parse('$baseURL/review/rating/$memberId');
+
+    http.Response response = await http.get(url);
+
+    double? ratingscore;
+    Map<String, dynamic> mapResponse = json.decode(response.body);
+    ratingscore = mapResponse['result'];
+
+    return ratingscore;
   }
 }

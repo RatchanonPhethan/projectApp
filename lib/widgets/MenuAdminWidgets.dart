@@ -6,8 +6,10 @@ import 'package:flutter_project_application/Screens/ListReportPostScreen.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../Screens/ListJoinPostScreen.dart';
+import '../Screens/ListMyReviewScreen.dart';
 import '../Screens/ListTransactionLogScreen.dart';
 import '../Screens/TopUpMoneyScreen.dart';
+import '../Screens/listMyPostScreen.dart';
 import '../Screens/loginScreen.dart';
 import '../styles/styles.dart';
 import 'MenuFooter.dart';
@@ -39,7 +41,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "หน้าหลัก",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -51,12 +53,12 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           onTap: () {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (BuildContext context) {
-              return const HomePage();
+              return const ListMyPostPage();
             }));
           },
           title: Text(
             "โพสต์แชร์ของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -73,7 +75,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "โพสต์แชร์ที่เข้าร่วม",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -82,15 +84,15 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
             size: 30,
             color: kIconColor,
           ),
-          // onTap: () {
-          //   Navigator.of(context).pushReplacement(
-          //       MaterialPageRoute(builder: (BuildContext context) {
-          //     return const HomeScreen();
-          //   }));
-          // },
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (BuildContext context) {
+              return const ListMyReviewPage();
+            }));
+          },
           title: Text(
             "ประวัติการรีวิว",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -107,7 +109,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "คำเชิญของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -124,7 +126,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "แจ้งเตือนของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -141,7 +143,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "เติมเงิน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -158,7 +160,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "ประวัติการรายงานโพสต์",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -175,7 +177,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "ประวัติการรายงานสมาชิก",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -186,6 +188,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           ),
           onTap: () async {
             await SessionManager().remove("username");
+            await SessionManager().remove("memberId");
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (BuildContext context) {
               return const LoginApp();
@@ -193,7 +196,7 @@ class _MenuAdminWidgetState extends State<MenuAdminWidget> {
           },
           title: Text(
             "ออกจากระบบ",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
       ],

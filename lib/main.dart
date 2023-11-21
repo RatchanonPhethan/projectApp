@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_application/styles/styles.dart';
-import 'package:flutter_project_application/widgets/MenuFooter.dart';
-import 'package:flutter_project_application/widgets/MenuWidget.dart';
-
-import 'Screens/Home.dart';
+import 'widgets/MenuFooter.dart';
 
 void main() {
   runApp(const MyApp());

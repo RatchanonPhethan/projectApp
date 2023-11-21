@@ -27,14 +27,13 @@ class _ListTransactionLogScreenState extends State<ListTransactionLogScreen> {
   List<TransactionLogModel>? logs;
   String? member;
   String? user;
-  final TransactionLogController joinPostController =
+  final TransactionLogController transactionLogController =
       TransactionLogController();
-  var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+  var outputFormat = DateFormat("dd/MM/yyyy HH:mm");
   var outputDate;
 
   void fetchLog(String memberId) async {
-    logs = await joinPostController.listLogsByMember(memberId);
-
+    logs = await transactionLogController.listLogsByMember(memberId);
     setState(() {
       isDataLoaded = true;
     });
@@ -71,17 +70,11 @@ class _ListTransactionLogScreenState extends State<ListTransactionLogScreen> {
       appBar: AppBar(
         title: Text(
           "แจ้งเตือน",
-          style: TextStyle(color: KFontColor),
-        ),
-        leading: BackButton(
-          color: Colors.black,
-          onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (BuildContext context) {
-            return const MainPage();
-          })),
+          style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
         ),
         backgroundColor: kPrimary,
       ),
+      drawer: const MenuWidget(),
       body: isDataLoaded == false
           ? Center(
               child: Column(
@@ -111,20 +104,45 @@ class _ListTransactionLogScreenState extends State<ListTransactionLogScreen> {
                         children: const [
                           Text(
                             "แจ้งเตือนทั้งหมด",
-                            style: TextStyle(fontFamily: 'Itim', fontSize: 32),
+                            style: TextStyle(fontFamily: 'Itim', fontSize: 20),
                           ),
                           Divider(
-                            thickness: 3,
-                            indent: 35,
-                            endIndent: 35,
+                            thickness: 1,
+                            indent: 50,
+                            endIndent: 50,
                             color: Colors.black,
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ListView.builder(
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          height: 30,
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              await transactionLogController
+                                  .removeLogByMemberId(member.toString());
+                              setState(() {
+                                isDataLoaded = false;
+                                getMemberBySession();
+                              });
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                    (states) => Colors.red)),
+                            icon: const Icon(Icons.delete_forever_outlined),
+                            label: const Text(
+                              'ลบทั้งหมด',
+                              style:
+                                  TextStyle(fontFamily: 'Itim', fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: logs?.length,
                             scrollDirection: Axis.vertical,
@@ -136,11 +154,14 @@ class _ListTransactionLogScreenState extends State<ListTransactionLogScreen> {
                                 child: ListTile(
                                   leading: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.max,
+                                    // crossAxisAlignment:
+                                    //     CrossAxisAlignment.center,
+                                    // mainAxisSize: MainAxisSize.max,
                                     children: const [
-                                      Icon(Icons.warning_amber_rounded)
+                                      Icon(
+                                        Icons.warning_amber_rounded,
+                                        color: Colors.red,
+                                      )
                                     ],
                                   ),
                                   title: Column(
@@ -151,29 +172,65 @@ class _ListTransactionLogScreenState extends State<ListTransactionLogScreen> {
                                       Text(
                                         "${logs?[index].post.post_name}",
                                         style: const TextStyle(
-                                            fontFamily: 'Itim', fontSize: 22),
+                                            fontFamily: 'Itim', fontSize: 18),
                                       ),
                                       Text(
                                         "${logs?[index].log_detail}",
                                         style: const TextStyle(
-                                            fontFamily: 'Itim', fontSize: 22),
+                                            fontFamily: 'Itim', fontSize: 18),
                                       ),
                                       Text(
-                                        outputFormat.format(logs![0].log_date),
+                                        '${outputFormat.format(logs![0].log_date)} น.',
                                         style: const TextStyle(
-                                            fontFamily: 'Itim', fontSize: 22),
+                                            fontFamily: 'Itim', fontSize: 18),
                                       ),
                                     ],
                                   ),
-                                  onTap: () {},
+                                  trailing: SizedBox(
+                                    width: 20,
+                                    height: 40,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          left: -17,
+                                          child: ElevatedButton.icon(
+                                            onPressed: () async {
+                                              await transactionLogController
+                                                  .removeLogById(logs![index]
+                                                      .transaction_id);
+                                              setState(() {
+                                                isDataLoaded = false;
+                                                getMemberBySession();
+                                              });
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateColor
+                                                        .resolveWith((states) =>
+                                                            Colors.white)),
+                                            icon: const Icon(
+                                              Icons.delete_forever_outlined,
+                                              color: Colors.red,
+                                            ),
+                                            label: const Text(
+                                              '',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               );
-                            })),
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-      drawer: const MenuWidget(),
     );
   }
 }

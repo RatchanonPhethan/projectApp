@@ -31,7 +31,7 @@ class _MenuPublicWidgetState extends State<MenuPublicWidget> {
           },
           title: Text(
             "หน้าหลัก",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -48,7 +48,7 @@ class _MenuPublicWidgetState extends State<MenuPublicWidget> {
           },
           title: Text(
             "เข้าสู่ระบบ",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
       ],

@@ -3,12 +3,12 @@ import 'package:flutter_project_application/Screens/Home.dart';
 import 'package:flutter_project_application/Screens/InviteScreen.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
-import '../Model/login.dart';
 import '../Screens/ListJoinPostScreen.dart';
+import '../Screens/ListMyReviewScreen.dart';
 import '../Screens/ListTransactionLogScreen.dart';
 import '../Screens/TopUpMoneyScreen.dart';
+import '../Screens/listMyPostScreen.dart';
 import '../Screens/loginScreen.dart';
-import '../controller/login_controller.dart';
 import '../styles/styles.dart';
 import 'MenuFooter.dart';
 
@@ -39,7 +39,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "หน้าหลัก",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -51,12 +51,12 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           onTap: () {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (BuildContext context) {
-              return const HomePage();
+              return const ListMyPostPage();
             }));
           },
           title: Text(
             "โพสต์แชร์ของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -73,7 +73,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "โพสต์แชร์ที่เข้าร่วม",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -82,15 +82,15 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
             size: 30,
             color: kIconColor,
           ),
-          // onTap: () {
-          //   Navigator.of(context).pushReplacement(
-          //       MaterialPageRoute(builder: (BuildContext context) {
-          //     return const HomeScreen();
-          //   }));
-          // },
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (BuildContext context) {
+              return const ListMyReviewPage();
+            }));
+          },
           title: Text(
             "ประวัติการรีวิว",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -107,7 +107,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "คำเชิญของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -124,7 +124,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "แจ้งเตือนของฉัน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -141,7 +141,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "เติมเงิน",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
         ListTile(
@@ -150,7 +150,9 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
             size: 30,
             color: kIconColor,
           ),
-          onTap: () {
+          onTap: () async {
+            await SessionManager().remove("username");
+            await SessionManager().remove("memberId");
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (BuildContext context) {
               return const LoginApp();
@@ -158,7 +160,7 @@ class _MenuMemberWidgetState extends State<MenuMemberWidget> {
           },
           title: Text(
             "ออกจากระบบ",
-            style: TextStyle(color: KFontColor),
+            style: TextStyle(color: KFontColor, fontFamily: 'Itim'),
           ),
         ),
       ],

@@ -1,8 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_project_application/Screens/ListJoinPostScreen.dart';
 import 'package:flutter_project_application/widgets/customTextFormField.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -49,7 +47,12 @@ class _ReviewPostedMemberScroonState extends State<ReviewPostedMemberScroon> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("รีวิว"),
+        title: const Text(
+          "รีวิว",
+          style: TextStyle(
+            fontFamily: 'Itim',
+          ),
+        ),
         leading: BackButton(
           color: Colors.black,
           onPressed: () => Navigator.of(context).pushReplacement(
@@ -68,34 +71,54 @@ class _ReviewPostedMemberScroonState extends State<ReviewPostedMemberScroon> {
                 child: Column(children: [
                   const Text(
                     "รีวิวผู้โพสต์",
-                    style: TextStyle(fontFamily: 'Itim', fontSize: 40),
+                    style: TextStyle(fontFamily: 'Itim', fontSize: 22),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 15),
+                    child: Divider(
+                      thickness: 1,
+                      indent: 50,
+                      endIndent: 50,
+                      color: Colors.black,
+                    ),
                   ),
                   Text(
-                    "ชื่อผู้โพสต์ : ${joinposts!.member.firstname}",
-                    style: const TextStyle(fontFamily: 'Itim', fontSize: 22),
+                    "ชื่อผู้โพสต์ : ${joinposts!.post.member.firstname} ${joinposts!.post.member.lastname}",
+                    style: const TextStyle(fontFamily: 'Itim', fontSize: 18),
                   ),
                   Text(
                     "โพสต์ : ${joinposts!.post.post_name}",
-                    style: const TextStyle(fontFamily: 'Itim', fontSize: 22),
+                    style: const TextStyle(fontFamily: 'Itim', fontSize: 18),
                   ),
                   Text(
-                    "วันที่ : $nowDate",
-                    style: const TextStyle(fontFamily: 'Itim', fontSize: 22),
+                    "จำนวนที่ซื้อ : ${joinposts!.quantity_product} ชิ้น",
+                    style: const TextStyle(fontFamily: 'Itim', fontSize: 18),
                   ),
-                  RatingBar.builder(
-                    initialRating: 1,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
+                  Text(
+                    "ราคาทั้งหมด : ${joinposts!.price} บาท",
+                    style: const TextStyle(fontFamily: 'Itim', fontSize: 18),
+                  ),
+                  Text(
+                    "วันที่รีวิว : $nowDate",
+                    style: const TextStyle(fontFamily: 'Itim', fontSize: 18),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 5),
+                    child: RatingBar.builder(
+                      initialRating: 1,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        score = rating;
+                      },
                     ),
-                    onRatingUpdate: (rating) {
-                      score = rating;
-                    },
                   ),
                   customTextFormField(
                     controller: commentTextController,
@@ -146,7 +169,12 @@ class _ReviewPostedMemberScroonState extends State<ReviewPostedMemberScroon> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Text("รีวิว"),
+                            Text(
+                              "รีวิว",
+                              style: TextStyle(
+                                fontFamily: 'Itim',
+                              ),
+                            ),
                           ],
                         ),
                       ),

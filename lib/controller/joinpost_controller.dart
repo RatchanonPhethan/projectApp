@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: unused_local_variable
 
 import 'package:flutter_project_application/Model/joinpost.dart';
 
@@ -14,8 +14,6 @@ class JoinPostController {
 
     var url = Uri.parse('$baseURL/join/list');
     var body = json.encode(data);
-
-    print(url);
 
     http.Response response = await http.post(url, headers: headers, body: body);
 
@@ -34,12 +32,9 @@ class JoinPostController {
 
     http.Response response = await http.get(url);
 
-    print(response.body);
-
     var jsonResponse = jsonDecode(response.body);
     JoinPostModel joinpost =
         JoinPostModel.fromJoinPostToJson(jsonResponse['result']);
-    print("Controller : ${joinpost.payment_id}");
     return joinpost;
   }
 
@@ -47,9 +42,7 @@ class JoinPostController {
     Map data = {};
     var url = Uri.parse('$baseURL/join/listmember/$postId');
     var body = json.encode(data);
-    print(url);
     http.Response response = await http.post(url, headers: headers, body: body);
-    print(response.body);
     List? list;
     Map<String, dynamic> mapResponse = json.decode(response.body);
     list = mapResponse['result'];
@@ -69,8 +62,6 @@ class JoinPostController {
     var url = Uri.parse('$baseURL/join/getmember/$memberId');
     var body = json.encode(data);
 
-    print(url);
-
     http.Response response = await http.post(url, headers: headers, body: body);
 
     // ignore: avoid_print
@@ -83,10 +74,10 @@ class JoinPostController {
     return list!.map((e) => JoinPostModel.fromJoinPostToJson(e)).toList();
   }
 
-  Future addJoinPost(String quantity_product, String username, String postId,
+  Future addJoinPost(String quantityProduct, String username, String postId,
       String price) async {
     Map data = {
-      "quantity_product": quantity_product,
+      "quantity_product": quantityProduct,
       "username": username,
       "postId": postId,
       "price": price
@@ -98,11 +89,11 @@ class JoinPostController {
     http.Response response = await http.post(url, headers: headers, body: body);
     //print(response.statusCode);
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
   }
 
   Future conFirmInvite(String quantityProduct, String username, String postId,
       String price, String inviteId) async {
+    print(inviteId);
     Map data = {
       "quantity_product": quantityProduct,
       "username": username,
@@ -117,18 +108,15 @@ class JoinPostController {
     http.Response response = await http.post(url, headers: headers, body: body);
     //print(response.statusCode);
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
   }
 
-  Future listJoinMember(String PostId) async {
+  Future listJoinMember(String postId) async {
     // ignore: prefer_interpolation_to_compose_strings
 
     Map data = {};
 
-    var url = Uri.parse('$baseURL/join/listmember/$PostId');
+    var url = Uri.parse('$baseURL/join/listmember/$postId');
     var body = json.encode(data);
-
-    print(url);
 
     http.Response response = await http.post(url, headers: headers, body: body);
 
@@ -151,7 +139,6 @@ class JoinPostController {
     http.Response response = await http.post(url, headers: headers, body: body);
     //print(response.statusCode);
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
   }
 
   Future memberCount(String postId) async {
@@ -168,7 +155,6 @@ class JoinPostController {
     int? str;
     Map<String, dynamic> mapResponse = json.decode(response.body);
     str = mapResponse['result'];
-    print(jsonResponse);
     return str;
   }
 
@@ -183,7 +169,6 @@ class JoinPostController {
     int? str;
     Map<String, dynamic> mapResponse = json.decode(response.body);
     str = mapResponse['result'];
-    print(jsonResponse);
     return str;
   }
 }

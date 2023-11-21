@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_application/Screens/ListJoinPostScreen.dart';
 import 'package:flutter_project_application/controller/report_controller.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../styles/styles.dart';
 import 'customTextFormField.dart';
@@ -29,6 +32,9 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
   PlatformFile? pickedFile;
   File? fileToDisplay;
   bool isLoadingPicture = true;
+  var sessionManager = SessionManager();
+  bool? isDataLoaded = false;
+  String? user;
 
   void _pickFile() async {
     try {
@@ -40,7 +46,7 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
       if (filePickerResult != null) {
         fileName = filePickerResult!.files.first.name;
         pickedFile = filePickerResult!.files.first;
-        fileToDisplay = File(pickedFile!.bytes.toString());
+        fileToDisplay = File(pickedFile!.path.toString());
         reportImgTextController.text = fileName.toString();
         print("File is ${fileName}");
       }
@@ -52,6 +58,19 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
     }
   }
 
+  void fetchUser() async {
+    user = await sessionManager.get("username");
+    setState(() {
+      isDataLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -61,12 +80,12 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
           builder: (BuildContext context) => AlertDialog(
             title: const Text('รายงานโพสต์!'),
             content: SizedBox(
-              height: 250,
+              height: 300,
               child: Form(
                 key: formkey,
                 child: Container(
                   color: Colors.white,
-                  height: 250.0,
+                  height: 300.0,
                   width: 400.0,
                   child: Column(
                     children: [
@@ -127,6 +146,13 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
                               child: TextFormField(
                                 controller: reportImgTextController,
                                 enabled: false,
+                                validator: (Value) {
+                                  if (Value!.isNotEmpty) {
+                                    return null;
+                                  } else {
+                                    return "กรุณาเลือกรูปภาพ";
+                                  }
+                                },
                                 decoration: InputDecoration(
                                     labelText: "แนบรูปภาพ",
                                     counterText: "",
@@ -167,11 +193,22 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
                             onPressed: () {
                               if (formkey.currentState!.validate()) {
                                 reportController.addReportPost(
+                                    fileToDisplay!,
                                     reportDetailTextController.text,
                                     reportImgTextController.text,
-                                    widget.member!,
+                                    user!,
                                     widget.postId!);
-                                Navigator.pop(context, 'OK');
+                                Timer(const Duration(milliseconds: 3000), () {
+                                  setState(() {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return const ListJoinPostScreen();
+                                        },
+                                      ),
+                                    );
+                                  });
+                                });
                               }
                             },
                             style: ButtonStyle(
@@ -198,7 +235,7 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
+                child: const Text('ปิด', style: TextStyle(fontFamily: 'Itim')),
               ),
             ],
           ),
@@ -206,8 +243,11 @@ class _ReportPostWidgetState extends State<ReportPostWidget> {
       },
       style: ButtonStyle(
           backgroundColor:
-              MaterialStateColor.resolveWith((states) => Colors.redAccent)),
-      child: const Icon(Icons.report_problem_sharp),
+              MaterialStateColor.resolveWith((states) => Colors.white)),
+      child: const Icon(
+        Icons.report_problem_outlined,
+        color: Colors.redAccent,
+      ),
     );
   }
 }

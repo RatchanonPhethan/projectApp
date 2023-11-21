@@ -1,12 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_project_application/Model/report.dart';
+import 'package:flutter_project_application/Screens/banMemberScreen.dart';
 import 'package:flutter_project_application/controller/report_controller.dart';
 
+import '../constant/constant_value.dart';
 import '../styles/styles.dart';
-import '../widgets/BanMemberWidget.dart';
-import '../widgets/CustomSearchDelegate.dart';
 import '../widgets/MenuFooter.dart';
 import '../widgets/MenuWidget.dart';
 
@@ -19,14 +19,41 @@ class ListReportMemberScreen extends StatefulWidget {
 
 class _ListReportMemberScreenState extends State<ListReportMemberScreen> {
   bool? isDataLoaded = false;
+  bool check = true;
   ReportController reportController = ReportController();
   List<ReportModel>? reports;
+  List<int> countMember = [];
+  List<String> imgMemberFileName = [];
 
   void fetchPost() async {
     reports = await reportController.listReportMember();
+    if (reports!.isNotEmpty) {
+      for (int i = 0; i < reports!.length; i++) {
+        int count = await reportController.reportMemberCount(
+            reports![i].member.member_id, reports![i].post.post_id);
+        print(count);
+        countMember.add(count);
+        String filePath = reports?[i].member.img_member ?? "";
+        String img = filePath.substring(
+            filePath.lastIndexOf('/') + 1, filePath.length - 2);
+        imgMemberFileName.add(img.toString());
+      }
+      setState(() {
+        isDataLoaded = true;
+      });
+    } else {
+      timeDuration();
+    }
+  }
 
+  void timeDuration() {
     setState(() {
-      isDataLoaded = true;
+      check = true;
+    });
+    Timer(const Duration(milliseconds: 2000), () {
+      setState(() {
+        check = false;
+      });
     });
   }
 
@@ -41,7 +68,8 @@ class _ListReportMemberScreenState extends State<ListReportMemberScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("รายชื่อการรายงานสมาชิก"),
+        title: Text("รายชื่อการรายงานสมาชิก",
+            style: TextStyle(fontFamily: 'Itim', color: KFontColor)),
         leading: BackButton(
           color: Colors.black,
           onPressed: () => Navigator.of(context).pushReplacement(
@@ -49,28 +77,55 @@ class _ListReportMemberScreenState extends State<ListReportMemberScreen> {
             return const MainPage();
           })),
         ),
-        centerTitle: true,
         backgroundColor: kPrimary,
       ),
       body: isDataLoaded == false
-          ? const CircularProgressIndicator()
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  check == true
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                          backgroundColor: Colors.grey,
+                        )
+                      : const Text(
+                          "ไม่พบการรายงานสมาชิก",
+                          style: TextStyle(fontFamily: 'Itim', fontSize: 18),
+                        ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return const MainPage();
+                        }));
+                      },
+                      child: const Text(
+                        "กลับสู่หน้าหลัก",
+                        style: TextStyle(fontFamily: 'Itim'),
+                      ))
+                ],
+              ),
+            )
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 40),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         children: const [
                           Text(
                             "รายชื่อการรายงานสมาชิก",
-                            style: TextStyle(fontFamily: 'Itim', fontSize: 32),
+                            style: TextStyle(fontFamily: 'Itim', fontSize: 20),
                           ),
                           Divider(
-                            thickness: 3,
-                            indent: 35,
-                            endIndent: 35,
+                            thickness: 1,
+                            indent: 50,
+                            endIndent: 50,
                             color: Colors.black,
                           ),
                         ],
@@ -88,37 +143,49 @@ class _ListReportMemberScreenState extends State<ListReportMemberScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             child: ListTile(
-                              leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [Icon(Icons.account_circle)],
+                              leading: ClipOval(
+                                child: SizedBox.fromSize(
+                                  size:
+                                      const Size.fromRadius(20), // Image radius
+                                  child: Image.network(
+                                      '$baseURL/member/${imgMemberFileName[index]}',
+                                      width: 10,
+                                      height: 10,
+                                      fit: BoxFit.cover),
+                                ),
                               ),
                               title: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${reports?[index].member.firstname} ${reports?[index].member.lastname}",
+                                    "ชื่อผู้ใช้ : ${reports?[index].member.firstname} ${reports?[index].member.lastname}",
                                     style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 22),
+                                        fontFamily: 'Itim', fontSize: 18),
                                   ),
                                   Text(
-                                    "${reports?[index].detail}",
+                                    "ชื่อบัญชี : ${reports?[index].member.login.username}",
                                     style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 22),
+                                        fontFamily: 'Itim', fontSize: 18),
+                                  ),
+                                  Text(
+                                    "จำนวนรายงาน : ${countMember[index]} รายงาน",
+                                    style: const TextStyle(
+                                        fontFamily: 'Itim', fontSize: 18),
                                   ),
                                 ],
                               ),
-                              trailing: BanMemberWidget(
-                                  member:
-                                      reports?[index].member.login.username),
+                              trailing: null,
                               onTap: () {
-                                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                //   Navigator.pushReplacement(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (_) => PostDetailScreen(
-                                //               postId: posts?[index].post_id)));
-                                // });
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return BanMemberScreen(
+                                          memberId:
+                                              reports![index].member.member_id);
+                                    },
+                                  ),
+                                );
                               },
                             ),
                           );

@@ -1,17 +1,19 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_project_application/Screens/ListJoinMember.dart';
 
 import '../controller/report_controller.dart';
 import '../styles/styles.dart';
 import 'customTextFormField.dart';
 
 class ReportMemberWidget extends StatefulWidget {
-  String? postId;
-  String? member;
+  String postId;
+  String member;
   ReportMemberWidget({super.key, required this.postId, required this.member});
 
   @override
@@ -42,7 +44,7 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
       if (filePickerResult != null) {
         fileName = filePickerResult!.files.first.name;
         pickedFile = filePickerResult!.files.first;
-        fileToDisplay = File(pickedFile!.bytes.toString());
+        fileToDisplay = File(pickedFile!.path.toString());
         reportImgTextController.text = fileName.toString();
         print("File is ${fileName}");
       }
@@ -61,14 +63,14 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: const Text('รายงานโพสต์!'),
+            title: const Text('รายงานสมาชิก!'),
             content: SizedBox(
-              height: 250,
+              height: 300,
               child: Form(
                 key: formkey,
                 child: Container(
                   color: Colors.white,
-                  height: 250.0,
+                  height: 300.0,
                   width: 400.0,
                   child: Column(
                     children: [
@@ -129,6 +131,13 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
                               child: TextFormField(
                                 controller: reportImgTextController,
                                 enabled: false,
+                                validator: (Value) {
+                                  if (Value!.isNotEmpty) {
+                                    return null;
+                                  } else {
+                                    return "กรุณาเลือกรูปภาพ";
+                                  }
+                                },
                                 decoration: InputDecoration(
                                     labelText: "แนบรูปภาพ",
                                     counterText: "",
@@ -143,20 +152,21 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
                             ),
                           ),
                           Expanded(
-                              flex: 1,
-                              child: SizedBox(
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _pickFile();
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.grey)),
-                                  child: const Text("เลือกรูปภาพ"),
-                                ),
-                              )),
+                            flex: 1,
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _pickFile();
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.grey)),
+                                child: const Text("เลือกรูปภาพ"),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       Padding(
@@ -172,18 +182,32 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
                                     fileToDisplay!,
                                     reportDetailTextController.text,
                                     reportImgTextController.text,
-                                    widget.member!,
-                                    widget.postId!);
-                                Navigator.pop(context, 'OK');
+                                    widget.member,
+                                    widget.postId);
+                                Timer(const Duration(milliseconds: 3000), () {
+                                  setState(() {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return ListJoinMemberScreen(
+                                            postId: widget.postId,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  });
+                                });
                               }
                             },
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateColor.resolveWith(
-                                    (states) => loginButtonColor),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0)))),
+                              backgroundColor: MaterialStateColor.resolveWith(
+                                  (states) => loginButtonColor),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
@@ -201,17 +225,21 @@ class _ReportMemberWidgetState extends State<ReportMemberWidget> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
+                child: const Text(
+                  'ปิด',
+                  style: TextStyle(fontFamily: 'Itim'),
+                ),
               ),
             ],
           ),
         );
       },
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(loginButtonColor)),
-      child: const Text(
-        "รายงาน",
-        style: TextStyle(fontFamily: 'Itim', fontSize: 22),
+          backgroundColor:
+              MaterialStateColor.resolveWith((states) => Colors.white)),
+      child: const Icon(
+        Icons.report_problem_outlined,
+        color: Colors.redAccent,
       ),
     );
   }

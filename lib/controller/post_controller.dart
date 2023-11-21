@@ -8,20 +8,10 @@ import 'dart:convert';
 
 class PostController {
   //query ListAllPosts return list
-  Future listAllPosts() async {
-    // ignore: prefer_interpolation_to_compose_strings
-
-    Map data = {};
-
-    var url = Uri.parse(baseURL + '/post/list');
-    var body = json.encode(data);
-
-    print(url);
-
-    http.Response response = await http.post(url, headers: headers, body: body);
-
-    // ignore: avoid_print
-    print(response.body);
+  //query ListAllPosts return list
+  Future getListAllPost() async {
+    var postUrl = Uri.parse('$baseURL/post/list');
+    http.Response response = await http.get(postUrl);
 
     List? list;
 

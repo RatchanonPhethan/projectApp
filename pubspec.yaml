@@ -38,13 +38,19 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_rating_bar: ^4.0.1
-  intl: ^0.18.0
+  intl: ^0.18.1
   provider: ^6.0.5
   sembast: ^2.4.8+1
   path: ^1.7.0
   flutter_session_manager: ^1.0.2
   flutter_bootstrap5: ^1.1.1+1
   file_picker: ^5.2.7
+  image_picker: ^0.8.4+4
+  eva_icons_flutter: ^3.1.0
+  another_carousel_pro: ^1.0.0
+  image_gallery_saver: ^2.0.3
+  path_provider: ^2.1.0
+  quickalert: 
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +78,10 @@ flutter:
   assets:
       - images/user.png
       - images/img.jpg
+      - images/addprofileicon.png
+      - images/icontruck.jpg
+      - images/icontruewallet.png
+      - images/iconpromtpay.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -85,12 +95,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Itim
+      fonts:
+        - asset: fonts/Itim-Regular.ttf
+          style: italic
+    - family: Raleway
+      fonts:
+        - asset: fonts/Raleway-Italic-VariableFont_wght.ttf
+        - asset: fonts/Raleway-VariableFont_wght.ttf
+          style: italic
+        # - asset: fonts/Schyler-Italic.ttf
+        #   style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
